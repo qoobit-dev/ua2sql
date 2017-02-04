@@ -85,8 +85,12 @@ transaction_table = Table('transaction', metadata,
                           Column('receipt', postgresql.JSONB)
                           )
 
-engine = create_engine('postgresql+psycopg2://' + CONFIG['user'] + ':' + CONFIG['password'] + '@'
-                       + CONFIG['postgres_server'] + '/' + CONFIG['database'])
+url = 'postgresql+psycopg2://' + CONFIG['user'] + ':' + CONFIG['password'] + '@' + CONFIG['postgres_server'] 
+if len(CONFIG['port']) > 0:
+	url += ':' + CONFIG['port']
+url += '/' + CONFIG['database'];
+engine = create_engine(url)
+
 conn = engine.connect()
 metadata.create_all(engine)
 
